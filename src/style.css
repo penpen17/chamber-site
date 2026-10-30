@@ -1,0 +1,138 @@
+/* =====================================================================
+   style.css — how the page LOOKS (colors, fonts, spacing, layout).
+
+   CSS basics:
+     .card { ... }   applies to every element with class="card" in index.html
+     #viewer { ... } applies to the one element with id="viewer"
+     a:hover { ... } applies while the mouse is over a link
+   Units: px = pixels, rem = relative to the base font size (1rem ≈ 16px),
+          vh = % of the screen height, fr = a share of the free space in a grid.
+   ===================================================================== */
+
+/* ✏️ COLORS — change these to restyle the whole site.
+   Use them anywhere as var(--name). Pick colors at https://coolors.co */
+:root {
+  --bg: #0d1117;      /* page background */
+  --panel: #161b22;   /* card background */
+  --line: #2a313c;    /* borders */
+  --text: #e6edf3;    /* main text */
+  --muted: #9aa4b1;   /* secondary text */
+  --accent: #4f8cff;  /* blue highlights */
+  --accent2: #f2a65a; /* orange highlights (the hero numbers) */
+  font-family: Inter, system-ui, -apple-system, sans-serif; /* ✏️ font */
+}
+
+/* Basic page setup */
+* { box-sizing: border-box; }                      /* width includes padding: makes sizes predictable */
+html { scroll-behavior: smooth; }                   /* nav links scroll smoothly instead of jumping */
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } } /* respect "reduce motion" settings */
+body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+/* ---------- Top navigation bar ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 10;            /* stays at the top while you scroll */
+  display: flex; justify-content: space-between; align-items: center; /* name left, links right */
+  padding: 14px 24px;
+  background: rgba(13, 17, 23, 0.85);               /* slightly see-through */
+  backdrop-filter: blur(8px);                       /* blurs the page behind it */
+  border-bottom: 1px solid var(--line);
+}
+.nav a { text-decoration: none; }
+.nav .brand { color: var(--text); font-weight: 600; }
+.nav .links a { color: var(--muted); margin-left: 18px; }
+.nav .links a:hover { color: var(--text); }
+
+/* ---------- Hero (the first screen): text on the left, 3D viewer on the right ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;                 /* two columns; the viewer is a bit wider */
+  gap: 32px; align-items: center;
+  min-height: calc(100vh - 60px);                   /* fill the screen minus the nav bar */
+  padding: 32px 24px; max-width: 1280px; margin: 0 auto; /* margin auto = centered */
+}
+.eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.8rem; }
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; margin: 0.3em 0; } /* grows with screen width, between 2rem and 3.2rem */
+.lede { color: var(--muted); font-size: 1.15rem; }
+.stats { display: flex; gap: 28px; margin-top: 28px; }
+.stats .num { display: block; font-size: 2.2rem; font-weight: 700; color: var(--accent2); }
+.stats small { color: var(--muted); }
+
+/* ---------- 3D viewer ---------- */
+.viewer-box { position: relative; }                 /* lets the part list sit on top of the viewer */
+
+/* Model tabs above the viewer ("Chamber", "Printing on mesh", ...) */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.tabs button {
+  background: var(--panel); color: var(--muted); cursor: pointer;
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 0.85rem;
+}
+.tabs button.on { color: var(--text); border-color: var(--accent); background: rgba(79, 140, 255, 0.15); }
+.caption { color: var(--muted); font-size: 0.9rem; margin: 8px 0 0; min-height: 1.4em; }
+#viewer.loading { opacity: 0.4; transition: opacity 0.2s; }  /* dim while a model is loading */
+[hidden] { display: none !important; }              /* makes the "hidden" attribute always win */
+#viewer {
+  width: 100%; aspect-ratio: 1 / 1; max-height: 75vh; /* square box; ✏️ try 4 / 3 for a wider view */
+  border-radius: 16px; border: 1px solid var(--line); overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #1d2633, #0d1117 70%); /* soft spotlight behind the model */
+}
+/* The <canvas> Three.js draws into: always exactly fill the #viewer box
+   (without this, the canvas can be too big on Retina screens and phones) */
+#viewer canvas { display: block; width: 100%; height: 100%; }
+.hero > * { min-width: 0; } /* lets the grid columns shrink on narrow screens */
+.viewer-error { display: grid; place-items: center; height: 100%; margin: 0; color: var(--muted); }
+.viewer-ui { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 12px; color: var(--muted); }
+.viewer-ui button {
+  background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer;
+}
+.viewer-ui button.on { border-color: var(--accent); color: var(--accent); } /* Auto-rotate is switched on */
+
+/* List of part names, shown in the top-left corner of the viewer */
+.part-list { position: absolute; top: 12px; left: 12px; list-style: none; margin: 0; padding: 0; font-size: 0.85rem; }
+.part-list li { cursor: pointer; padding: 3px 8px; margin-bottom: 4px; border-radius: 6px; background: rgba(22, 27, 34, 0.7); }
+.part-list li.active { outline: 1px solid var(--accent); } /* the selected part */
+.part-list i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; } /* color dot */
+.hint { color: var(--muted); font-size: 0.8rem; }
+
+/* ---------- Content sections (Problem, Design, ...) ---------- */
+.section { max-width: 1100px; margin: 0 auto; padding: 96px 24px; border-top: 1px solid var(--line); }
+h2 { font-size: 2rem; margin-top: 0; }
+
+/* Cards in a grid: as many columns as fit, each at least 260px wide */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+.card h3 { margin-top: 0; color: var(--accent); }
+.card video, .card img { width: 100%; border-radius: 8px; } /* images/videos fill the card width */
+
+/* Design iterations: 4 steps side by side */
+.timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 40px; }
+.timeline .step { border-top: 3px solid var(--accent); padding-top: 10px; }
+.timeline b { display: block; color: var(--accent2); }
+.timeline span { color: var(--muted); font-size: 0.9rem; }
+
+/* Image gallery */
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 24px; }
+.gallery figure { margin: 0; }
+.gallery img, .gallery video { width: 100%; border-radius: 12px; display: block; }
+.gallery figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
+.gallery.videos { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.gallery video { aspect-ratio: 1 / 1; background: #000; }   /* square, black until the video loads */
+.gallery figcaption b { color: var(--text); }
+
+/* Skill "chips" and links in the About section */
+.skills { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 16px 0; }
+.skills li { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 12px; font-size: 0.9rem; }
+.links-row a { color: var(--accent); }
+
+/* Grey dashed box used as a placeholder until you add real images — delete class="ph" when you do */
+.ph { aspect-ratio: 4 / 3; display: grid; place-items: center; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); }
+
+.footer { text-align: center; color: var(--muted); padding: 40px; border-top: 1px solid var(--line); }
+
+/* ---------- Phones and small screens (narrower than 860px) ---------- */
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; padding: 24px 16px; } /* stack text above the viewer */
+  .nav .links { display: none; }                           /* hide nav links to save space */
+  .timeline { grid-template-columns: 1fr 1fr; }             /* 2 steps per row instead of 4 */
+  .section { padding: 64px 16px; }
+}

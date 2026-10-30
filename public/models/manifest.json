@@ -1,0 +1,54 @@
+{
+  "_help": [
+    "This file tells the 3D viewer which models to show. Each model gets a tab above the viewer, in this order.",
+    "JSON does not allow comments, so the notes are here.",
+    "  id       = short name, no spaces",
+    "  label    = text on the tab",
+    "  glb      = file in this folder, made by scripts/export_web_models.py from your Blender scenes",
+    "  explode  = false: no Explode slider. true: automatic explode (parts move away from the middle).",
+    "             Or set each part's movement: { \"Part name\": [X, Y, Z] } in mm, same axes as in Blender",
+    "             (for the chamber: -X = back, +X = front, +Z = up). Parts not listed don't move.",
+    "             The part name must match the name shown in the part list on the website.",
+    "  caption  = one sentence shown under the viewer",
+    "Instead of glb you can list STL files: \"parts\": [{ \"name\": \"Lid\", \"file\": \"lid.stl\", \"color\": \"#f2a65a\" }]",
+    "  (opacity less than 1 gives a glass look; \"upAxis\": \"Y\" if the STL appears lying on its side)",
+    "Careful with JSON: every item except the last one needs a comma, and text needs double quotes."
+  ],
+  "models": [
+    {
+      "id": "chamber",
+      "label": "Chamber",
+      "glb": "chamber.glb",
+      "explode": {
+        "Coverslip 24x60 (back)":  [-40, 0, 0],
+        "Arabidopsis seedlings":   [-27, 0, 0],
+        "Printed-on-mesh insert":  [-14, 0, 0],
+        "Coverslip 24x32 (front)": [20, 0, 0],
+        "Lid":                     [20, 0, 20],
+        "Cap":                     [0, 0, 15]
+      },
+      "caption": "The single imaging chamber with Arabidopsis seedlings on the printed-on-mesh insert."
+    },
+    {
+      "id": "printing",
+      "label": "Printing on mesh",
+      "glb": "printing.glb",
+      "explode": false,
+      "caption": "Frames are printed directly onto nylon mesh (Bambu Lab A1 mini, PETG)."
+    },
+    {
+      "id": "horizontal",
+      "label": "Horizontal stage",
+      "glb": "stage_horizontal.glb",
+      "explode": false,
+      "caption": "The chamber mounted in a stage insert on a standard inverted confocal."
+    },
+    {
+      "id": "vertical",
+      "label": "Vertical stage",
+      "glb": "stage_vertical.glb",
+      "explode": false,
+      "caption": "Chambers in the vertical-stage holder, so roots grow downward along gravity during imaging."
+    }
+  ]
+}

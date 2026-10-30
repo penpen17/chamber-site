@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.DS_Store
+assets_source/blender/
+assets_source/microscopy/*.avi
+notes/records.md
+
+# Private: planning notes and README (not published)
+notes/
+README.md

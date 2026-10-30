@@ -1,0 +1,195 @@
+<!doctype html>
+<!--
+  ======================================================================
+  index.html — the CONTENT of your website (all the text, images, links).
+  This is the file you will edit the most.
+
+  HTML basics:
+    <h1>…</h1>  biggest heading      <h2>…</h2>  section heading
+    <p>…</p>    paragraph            <a href="…">…</a>  link
+    <ul><li>…</li></ul>  bullet list
+    <img src="images/photo.webp" alt="description">   picture
+    class="card"  connects an element to a style in src/style.css
+    id="design"   a unique name; the nav link href="#design" scrolls to it
+    Text between <!- - and - -> (without spaces) is a comment: the browser ignores it.
+
+  Search this file for ✏️ to find the places to fill in.
+  Save the file while "npm run dev" is running, and the browser updates by itself.
+  ======================================================================
+-->
+<html lang="en">
+<head>
+  <!-- The <head> is not shown on the page; it holds settings for the browser and Google. -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- makes it work on phones -->
+  <!-- ✏️ Text shown in the browser tab and in Google results -->
+  <title>3D-Printed Imaging Chamber for Live Root Imaging — Jia Pang</title>
+  <!-- ✏️ Short summary shown under the title in Google results / link previews -->
+  <meta name="description" content="A low-cost, 3D-printed, biocompatible imaging chamber for multi-day live confocal imaging of Arabidopsis roots on vertical and horizontal microscope stages." />
+  <link rel="stylesheet" href="/src/style.css" /> <!-- loads the styles -->
+</head>
+<body>
+
+  <!-- ============ NAVIGATION BAR (stays at the top) ============ -->
+  <nav class="nav">
+    <a class="brand" href="#top">Jia Pang</a> <!-- ✏️ your name -->
+    <div class="links">
+      <!-- Each href="#xyz" jumps to the element with id="xyz" further down -->
+      <a href="#problem">Motivation</a>
+      <a href="#design">Design</a>
+      <a href="#fabrication">Fabrication</a>
+      <a href="#results">Results</a>
+      <a href="#about">About</a>
+    </div>
+  </nav>
+
+  <!-- ============ HERO: first screen, with the interactive 3D model ============ -->
+  <header id="top" class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Plant imaging · 3D printing · Confocal microscopy</p> <!-- ✏️ small label above the title -->
+      <h1>A 3D-printed imaging chamber for multi-day live imaging of plant roots</h1> <!-- ✏️ main title -->
+      <!-- ✏️ One sentence: what it enables, how much cheaper/faster, and for whom -->
+      <p class="lede">A biocompatible, low-cost chamber that keeps Arabidopsis seedlings growing healthily on vertical- and horizontal-stage confocal microscopes.</p>
+
+      <!-- ✏️ Three key numbers. data-count="..." is the number the animation counts up to.
+           (Taken from the time-lapse timestamps: 0–2,610 min with one frame every 15 min.) -->
+      <div class="stats">
+        <div><span class="num" data-count="3">0</span><small>days in one continuous time-lapse</small></div>
+        <div><span class="num" data-count="3">0</span><small>chambers could be imaged in one session</small></div>
+        <div><span class="num" data-count="2">0</span><small>microscope stage setups</small></div>
+      </div>
+    </div>
+
+    <!-- The 3D viewer. src/viewer.js draws the model inside <div id="viewer">.
+         Don't change the id="..." names here: the JavaScript looks for them. -->
+    <div class="viewer-wrap">
+      <!-- One tab per model; filled in automatically from public/models/manifest.json -->
+      <div id="model-tabs" class="tabs"></div>
+      <div class="viewer-box">
+        <div id="viewer" aria-label="Interactive 3D model of the imaging chamber"></div>
+        <ul id="part-list" class="part-list"></ul> <!-- filled in automatically with your part names -->
+      </div>
+      <p id="model-caption" class="caption"></p> <!-- the "caption" text from manifest.json -->
+      <div class="viewer-ui">
+        <label id="explode-label">Explode <input id="explode" type="range" min="0" max="1" step="0.01" value="0" /></label>
+        <button id="autorotate" type="button">Auto-rotate</button>
+        <button id="reset" type="button">Reset view</button>
+      </div>
+      <p class="hint">Drag to rotate · scroll to zoom · click a part</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ MOTIVATION ============ -->
+    <section id="problem" class="section">
+      <h2>Motivation</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Responses take time</h3>
+          <p>Plant root responses to abiotic and biotic signals can be time-dependent, so a platform that supports long-term imaging while keeping the samples healthy is essential.</p>
+        </article>
+        <article class="card">
+          <h3>Roots grow with gravity</h3>
+          <p>Vertical-stage microscopy lets plants grow naturally along the gravity vector (gravitropism), but compatible sample-mounting methods still need to be developed.</p>
+        </article>
+        <article class="card">
+          <h3>Commercial options fall short</h3>
+          <p>Current commercial chambers are basic and expensive. They work well for cell cultures on standard horizontal microscopes, but are limited for live imaging of growing samples.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ DESIGN ============ -->
+    <section id="design" class="section">
+      <h2>Design</h2>
+      <!-- Each <article class="card"> is one box. Copy-paste a whole card to add another. -->
+      <div class="grid">
+        <article class="card">
+          <h3>Printing on mesh</h3>
+          <p>The frame is printed directly onto a nylon mesh, fusing the two together. The mesh keeps the sample moist, and the printed frame supports whole Arabidopsis seedlings and makes them easier to transfer.</p>
+        </article>
+        <article class="card">
+          <h3>Modular, semi-closed chamber</h3>
+          <p>The chamber is modular and fits the microscope stage, and its semi-closed design helps maintain sterility during long imaging sessions.</p>
+        </article>
+        <article class="card">
+          <h3>Vertical and horizontal stages</h3>
+          <p>The same chamber is used upright on a vertical stage, so roots grow along gravity, or in a stage insert on a standard inverted microscope. Switch between the setups in the 3D viewer above.</p>
+        </article>
+      </div>
+
+      <!-- Workflow: one <div class="step"> per step. Add or remove steps as needed. -->
+      <div class="timeline">
+        <div class="step"><b>1 · Print</b><span>Print the frame directly onto nylon mesh</span></div>
+        <div class="step"><b>2 · Assemble</b><span>Bond the coverslips with biocompatible epoxy</span></div>
+        <div class="step"><b>3 · Mount</b><span>Transfer seedlings on the mesh frame into the chamber</span></div>
+        <div class="step"><b>4 · Image</b><span>Multi-day confocal time-lapse of the root tip</span></div>
+      </div>
+    </section>
+
+    <!-- ============ FABRICATION ============ -->
+    <section id="fabrication" class="section">
+      <h2>Fabrication</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Printer &amp; material</h3> <!-- "&amp;" shows an "&" sign -->
+          <p>Printed on a Bambu Lab A1 mini in PETG Translucent and PETG-HF.</p>
+          <!-- ✏️ Optional: add layer height, nozzle, print time, or material cost per chamber -->
+        </article>
+        <article class="card">
+          <h3>Coverslip assembly</h3>
+          <p>Coverslips are bonded with LOCTITE® EA M-31CL, a medical-grade epoxy adhesive tested to ISO 10993 for biocompatibility.</p>
+        </article>
+        <article class="card">
+          <h3>Printing on mesh</h3>
+          <p>The nylon mesh is placed on the print bed and the frame is printed over it, so mesh and frame fuse without glue. Open the "Printing on mesh" tab in the 3D viewer to see the setup.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ RESULTS ============ -->
+    <section id="results" class="section">
+      <h2>Results</h2>
+      <p>Confocal time-lapse imaging of an Arabidopsis root tip in the chamber, tracking the root while bacteria colonize its surface.</p>
+      <!-- Videos only start loading and playing when they scroll into view (data-autoplay, see src/animations.js).
+           poster = the still image shown before the video starts. -->
+      <div class="gallery videos">
+        <figure>
+          <video src="videos/root_tip_tracking_day1.mp4" poster="images/root_tip_tracking_day1_poster.jpg"
+                 data-autoplay muted loop playsinline preload="none"></video>
+          <figcaption><b>Day 1</b> · Root-tip tracking and bacterial colonization (0–1,275 min, one frame every 15 min).</figcaption>
+        </figure>
+        <figure>
+          <video src="videos/root_tip_tracking_day2_3.mp4" poster="images/root_tip_tracking_day2_3_poster.jpg"
+                 data-autoplay muted loop playsinline preload="none"></video>
+          <figcaption><b>Days 2–3</b> · Heavy bacterial colonization and its clearance by root-cap cell shedding (0–2,610 min, one frame every 15 min).</figcaption>
+        </figure>
+      </div>
+      <!-- ✏️ Add to the captions: magenta/green markers, objective, and the scale-bar length -->
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="section">
+      <h2>About me</h2>
+      <!-- ✏️ Add one or two sentences about your background, plus a CV link, e.g. <a href="downloads/CV.pdf">CV (PDF)</a> -->
+      <p>My role in this project: CAD design, 3D printing, confocal live imaging and image analysis.</p>
+      <ul class="skills">
+        <li>CAD (Fusion 360)</li>
+        <li>3D printing</li>
+        <li>Blender visualization</li>
+        <li>Confocal live imaging</li>
+        <li>Image analysis</li>
+      </ul>
+      <p class="links-row">
+        <a href="https://orcid.org/0000-0001-5705-9597" target="_blank" rel="noopener">ORCID 0000-0001-5705-9597</a>
+        <!-- ✏️ More links: · <a href="mailto:you@example.com">Email</a> · <a href="https://github.com/you">GitHub</a> -->
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">© 2026 Jia Pang, Niko Geldner lab, University of Lausanne</footer> <!-- ✏️ your name -->
+
+  <!-- Loads the JavaScript (3D viewer + animations). Keep this as the last line in <body>. -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

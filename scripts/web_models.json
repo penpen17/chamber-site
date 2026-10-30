@@ -1,0 +1,78 @@
+{
+  "_help": [
+    "Settings for scripts/export_web_models.py: which .blend becomes which web model, and how objects are grouped.",
+    "groups: the first rule whose regex matches the object name (or one of its parents' names) wins.",
+    "        Each group becomes ONE clickable part on the website. Objects that match nothing go to 'catchAll'.",
+    "maxTris: objects with more triangles than this are simplified (Decimate) for the web.",
+    "skip: regex of object names to leave out of the web model."
+  ],
+  "models": [
+    {
+      "id": "chamber",
+      "label": "Single chamber",
+      "blend": "assets_source/blender/single_chamber.blend",
+      "out": "public/models/chamber.glb",
+      "explode": true,
+      "maxTris": 30000,
+      "groups": [
+        ["Lid", "lid"],
+        ["Cap", "^cap"],
+        ["Chamber body", "^3D024mp"],
+        ["Printed-on-mesh insert", "insert|SEFAR"],
+        ["Coverslip 24x60 (back)", "coverslip_2460"],
+        ["Coverslip 24x32 (front)", "coverslip_2432"],
+        ["Medium (2 ml)", "liquid"]
+      ],
+      "catchAll": "Arabidopsis seedlings"
+    },
+    {
+      "id": "printing",
+      "label": "Printing on mesh",
+      "blend": "assets_source/blender/printing_on_mesh_method.blend",
+      "out": "public/models/printing.glb",
+      "explode": false,
+      "maxTris": 30000,
+      "groups": [
+        ["Print head (Bambu Lab A1 mini)", "a1mini"],
+        ["Nylon mesh (SEFAR)", "SEFAR"],
+        ["Printed frames", "insert"],
+        ["Textured PEI bed", "PEI|bed"]
+      ],
+      "catchAll": "Other"
+    },
+    {
+      "id": "horizontal",
+      "label": "Horizontal stage",
+      "blend": "assets_source/blender/imaging_on_horizontal_stage.blend",
+      "out": "public/models/stage_horizontal.glb",
+      "explode": false,
+      "maxTris": 30000,
+      "skip": "Backdrop|cutter",
+      "groups": [
+        ["Objective", "objective"],
+        ["Stage insert", "main_body|Slider"],
+        ["Arabidopsis seedlings", "arabidopsis|leaf|petiole|root|hypocotyl|Meristerm|cotyledon|cross_section|^a_"],
+        ["Coverslips", "coverslip"],
+        ["Medium (2 ml)", "liquid"]
+      ],
+      "catchAll": "Imaging chamber"
+    },
+    {
+      "id": "vertical",
+      "label": "Vertical stage",
+      "blend": "assets_source/blender/imaging_on_vertical_stage.blend",
+      "out": "public/models/stage_vertical.glb",
+      "explode": false,
+      "maxTris": 30000,
+      "skip": "^ref_|^side$|top_detail",
+      "groups": [
+        ["Objective", "objective"],
+        ["Confocal holder", "confocal_holder"],
+        ["Arabidopsis seedlings", "Arabidopsis|arabidopsis|leaf|petiole|root|hypocotyl|Meristerm|cotyledon|cross_section|^a_"],
+        ["Coverslips", "coverslip"],
+        ["Medium (2 ml)", "liquid"]
+      ],
+      "catchAll": "Imaging chambers"
+    }
+  ]
+}
